@@ -1,0 +1,36 @@
+# Python virtual environment
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Windows shortcuts
+*.lnk
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large model checkpoints (optional — comment out if you want to track them)
+# results/*/models/*.zip
+
+# Temp files generated during build
+metrics_embedded.json
+metrics_js.txt
+gen_html.py
+
+# Old nested result folders (replaced by results/)
+ppo_results/
+ppo_eureka_results_claude/
+ppo_eureka_results_grok/

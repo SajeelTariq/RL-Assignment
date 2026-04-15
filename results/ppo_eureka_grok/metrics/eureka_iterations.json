@@ -1,0 +1,41 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "score": -345.99,
+      "std": 57.12,
+      "code": "def compute_reward(obs, action, next_obs, terminated, truncated, info) -> float:\n    # Reward for moving towards the landing pad\n    distance_reward = -0.1 * (np.abs(next_obs[0]) + np.abs(next_obs[1]))\n\n    # Reward for slowing down as it approaches the pad\n    velocity_reward = -0.05 * (np.abs(next_obs[2]) + np.abs(next_obs[3]))\n\n    # Reward for staying upright\n    angle_reward = -0.1 * np.abs(next_obs[4])\n\n    # Reward for making leg contact with the ground\n    leg_contact_reward = 0.5 * (next_obs[6] + next_obs[7])\n\n    # Penalty for wasting fuel\n    fuel_penalty = -0.01 if action != 0 else 0\n\n    # Landing bonus\n    landing_bonus = 250 if terminated and next_obs[6] == 1 and next_obs[7] == 1 and np.abs(next_obs[2]) < 0.1 and np.abs(next_obs[3]) < 0.1 else 0\n\n    # Crash penalty\n    crash_penalty = -150 if terminated and not (next_obs[6] == 1 and next_obs[7] == 1) else 0\n\n    # Combine all rewards\n    reward = distance_reward + velocity_reward + angle_reward + leg_contact_reward + fuel_penalty + landing_bonus + crash_penalty\n\n    return reward",
+      "feedback": "The agent is performing very poorly \u2014 likely crashing repeatedly or drifting off-screen. The reward signal may not be guiding the agent towards the pad at all. Consider stronger position-based shaping. During training, the mean episode reward (under YOUR reward function, not the original) was -76.9 over the last 20 episodes. The evaluation score above uses the ORIGINAL LunarLander reward for fair comparison. Standard deviation: 57.1. Variance is acceptable.",
+      "reward_file": "/content/ppo_eureka_results/reward_functions/iteration_01.py",
+      "tokens_input": 885,
+      "tokens_output": 305
+    },
+    {
+      "iteration": 2,
+      "score": -156.67,
+      "std": 31.67,
+      "code": "def compute_reward(obs, action, next_obs, terminated, truncated, info) -> float:\n    # Stronger position-based shaping to guide the agent towards the pad\n    distance_reward = -0.2 * (np.abs(next_obs[0]) + 2 * np.abs(next_obs[1]))\n\n    # Reward for slowing down as it approaches the pad\n    velocity_reward = -0.1 * (np.abs(next_obs[2]) + np.abs(next_obs[3]))\n\n    # Reward for staying upright\n    angle_reward = -0.2 * np.abs(next_obs[4])\n\n    # Reward for making leg contact with the ground\n    leg_contact_reward = 1.0 * (next_obs[6] + next_obs[7])\n\n    # Penalty for wasting fuel\n    fuel_penalty = -0.05 if action != 0 else 0\n\n    # Penalty for deviation from the center\n    center_deviation_penalty = -0.1 * np.abs(next_obs[0])\n\n    # Landing bonus\n    landing_bonus = 280 if terminated and next_obs[6] == 1 and next_obs[7] == 1 and np.abs(next_obs[2]) < 0.1 and np.abs(next_obs[3]) < 0.1 else 0\n\n    # Crash penalty\n    crash_penalty = -180 if terminated and not (next_obs[6] == 1 and next_obs[7] == 1) else 0\n\n    # Combine all rewards\n    reward = distance_reward + velocity_reward + angle_reward + leg_contact_reward + fuel_penalty + center_deviation_penalty + landing_bonus + crash_penalty\n\n    return reward",
+      "feedback": "The agent is performing very poorly \u2014 likely crashing repeatedly or drifting off-screen. The reward signal may not be guiding the agent towards the pad at all. Consider stronger position-based shaping. During training, the mean episode reward (under YOUR reward function, not the original) was -102.9 over the last 20 episodes. The evaluation score above uses the ORIGINAL LunarLander reward for fair comparison. Standard deviation: 31.7. Variance is acceptable.",
+      "reward_file": "/content/ppo_eureka_results/reward_functions/iteration_02.py",
+      "tokens_input": 2247,
+      "tokens_output": 650
+    },
+    {
+      "iteration": 3,
+      "score": -370.14,
+      "std": 259.59,
+      "code": "def compute_reward(obs, action, next_obs, terminated, truncated, info) -> float:\n    distance_to_pad = np.sqrt(next_obs[0]**2 + next_obs[1]**2)\n    distance_reward = -0.5 * distance_to_pad\n\n    velocity_reward = -0.2 * (np.abs(next_obs[2]) + np.abs(next_obs[3]))\n    if distance_to_pad < 0.5:\n        velocity_reward = -0.5 * (np.abs(next_obs[2]) + np.abs(next_obs[3]))\n\n    angle_reward = -0.3 * np.abs(next_obs[4])\n\n    leg_contact_reward = 2.0 * (next_obs[6] + next_obs[7])\n\n    fuel_penalty = -0.1 if action != 0 else 0\n\n    center_deviation_penalty = -0.2 * np.abs(next_obs[0])\n\n    landing_bonus = 300 if terminated and next_obs[6] == 1 and next_obs[7] == 1 and np.abs(next_obs[2]) < 0.1 and np.abs(next_obs[3]) < 0.1 else 0\n\n    crash_penalty = -200 if terminated and not (next_obs[6] == 1 and next_obs[7] == 1) else 0\n\n    reward = distance_reward + velocity_reward + angle_reward + leg_contact_reward + fuel_penalty + center_deviation_penalty + landing_bonus + crash_penalty\n\n    return reward",
+      "feedback": "The agent is performing very poorly \u2014 likely crashing repeatedly or drifting off-screen. The reward signal may not be guiding the agent towards the pad at all. Consider stronger position-based shaping. During training, the mean episode reward (under YOUR reward function, not the original) was -205.9 over the last 20 episodes. The evaluation score above uses the ORIGINAL LunarLander reward for fair comparison. Standard deviation: 259.6. High variance suggests inconsistent landing \u2014 add stability terms.",
+      "reward_file": "/content/ppo_eureka_results/reward_functions/iteration_03.py",
+      "tokens_input": 3649,
+      "tokens_output": 960
+    }
+  ],
+  "best_iteration": 2,
+  "best_score": -156.67,
+  "token_usage": {
+    "input": 3649,
+    "output": 960,
+    "api_calls": 3
+  }
+}
