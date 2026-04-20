@@ -208,15 +208,15 @@
 
   <div class="charts-grid-3">
     <div class="chart-box">
-      <div class="chart-title">PPO Baseline &#8212; Episode Reward</div>
+      <div class="chart-title">PPO Baseline &#8212; Reward vs Timestep</div>
       <div id="chart-ppo" style="height:280px"></div>
     </div>
     <div class="chart-box">
-      <div class="chart-title">PPO + Eureka (Claude) &#8212; Episode Reward</div>
+      <div class="chart-title">PPO + Eureka (Claude) &#8212; Reward vs Timestep</div>
       <div id="chart-claude" style="height:280px"></div>
     </div>
     <div class="chart-box">
-      <div class="chart-title">PPO + Eureka (Grok) &#8212; Episode Reward</div>
+      <div class="chart-title">PPO + Eureka (Grok) &#8212; Reward vs Timestep</div>
       <div id="chart-grok" style="height:280px"></div>
     </div>
   </div>
@@ -391,14 +391,14 @@ function buildIndividual(divId,key,color){
   const d=METRICS[key];
   const roll=rollingAvg(d.rewards,50);
   const traces=[
-    {x:d.episodes,y:d.rewards,mode:"markers",type:"scatter",name:"Episode Reward",
-     marker:{color:color,opacity:0.2,size:3},hovertemplate:"Ep %{x}: %{y:.1f}<extra></extra>"},
-    {x:d.episodes,y:roll,mode:"lines",type:"scatter",name:"Rolling Avg (50)",
-     line:{color:color,width:2.5},hovertemplate:"Ep %{x}: %{y:.1f}<extra></extra>"}
+    {x:d.timesteps,y:d.rewards,mode:"markers",type:"scatter",name:"Episode Reward",
+     marker:{color:color,opacity:0.2,size:3},hovertemplate:"Ts %{x}: %{y:.1f}<extra></extra>"},
+    {x:d.timesteps,y:roll,mode:"lines",type:"scatter",name:"Rolling Avg (50)",
+     line:{color:color,width:2.5},hovertemplate:"Ts %{x}: %{y:.1f}<extra></extra>"}
   ];
   const layout=Object.assign({},BASE_LAYOUT,{
     margin:{t:10,r:20,b:45,l:55},
-    xaxis:Object.assign({},BASE_LAYOUT.xaxis,{title:{text:"Episode",font:{color:"#5a7ab0"}}}),
+    xaxis:Object.assign({},BASE_LAYOUT.xaxis,{title:{text:"Timestep",font:{color:"#5a7ab0"}}}),
     yaxis:Object.assign({},BASE_LAYOUT.yaxis,{title:{text:"Reward",font:{color:"#5a7ab0"}}}),
     shapes:[{type:"line",x0:0,x1:1,xref:"paper",y0:200,y1:200,
              line:{color:"#2a6a3a",width:1,dash:"dot"}}],

@@ -34,3 +34,5 @@ gen_html.py
 ppo_results/
 ppo_eureka_results_claude/
 ppo_eureka_results_grok/
+
+image.png
